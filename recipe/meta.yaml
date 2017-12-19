@@ -15,7 +15,7 @@ build:
   # It is possible to add windows support, but the
   # graphviz win package is not ready for it yet
   skip: True  # [win]
-  script: python setup.py install --single-version-externally-managed --record=record.txt
+  script: python setup.py install --single-version-externally-managed --record=record.txt --include-path=$PREFIX/include --library-path=$PREFIX/lib
 
 requirements:
   build:
@@ -23,7 +23,7 @@ requirements:
     - python
     - setuptools
     - graphviz 2.38.*
-    - pkg-config
+
   run:
     - python
     - graphviz 2.38.*
