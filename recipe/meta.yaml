@@ -18,11 +18,13 @@ build:
   script: python setup.py install --single-version-externally-managed --record=record.txt --include-path=$PREFIX/include --library-path=$PREFIX/lib
 
 requirements:
-  build:
-    - toolchain
+  host:
     - python
     - setuptools
     - graphviz 2.38.*
+
+  build:
+    - {{ compiler('c') }}
 
   run:
     - python
