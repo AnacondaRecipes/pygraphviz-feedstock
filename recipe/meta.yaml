@@ -11,7 +11,8 @@ source:
   sha256: ae621d143b7ad0a7d88d5766e8914ae06f960ee11e6daff26fe5836dfba40065
   patches:
     - 0001-Merge-bytes-decoding-fix.patch
-    - 0001-Fix-segmentation-faults-in-test_clear.py.patch
+    - 0002-Fix-segmentation-faults-in-test_clear.py.patch
+    - 0003-Prevent-STARTUPINFO-persistence-between-calls.patch
 
 build:
   number: 1
