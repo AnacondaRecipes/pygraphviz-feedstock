@@ -12,7 +12,7 @@ source:
   patches:
     - 0001-Merge-bytes-decoding-fix.patch
     - 0002-Fix-segmentation-faults-in-test_clear.py.patch
-    - 0003-Prevent-STARTUPINFO-persistence-between-calls.patch
+    - 0003-Prevent-STARTUPINFO-persistence-between-calls.patch  # [win]
 
 build:
   number: 1
