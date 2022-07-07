@@ -1,5 +1,5 @@
 {% set name = "pygraphviz" %}
-{% set version = "1.7" %}
+{% set version = "1.9" %}
 
 package:
   name: {{ name|lower }}
@@ -9,32 +9,32 @@ source:
   fn: {{ name }}-{{ version }}.tar.gz
   # For some reason there are no .gz files here
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.zip
-  sha256: a7bec6609f37cf1e64898c59f075afd659106cf9356c5f387cecaa2e0cdb2304
+  sha256: fa18f7c6cea28341a4e466ed0cf05682b0a68288afe8dd7c9426782f7c1ae01c
   patches:
-    # - 0001-Merge-bytes-decoding-fix.patch
-    # - 0002-Fix-segmentation-faults-in-test_clear.py.patch
-    # - 0003-Prevent-STARTUPINFO-persistence-between-calls.patch  # [win]
+    - patches/0001-Ensure-define_macros-remains-a-list-on-Windows.patch
+    - patches/0002-AGraph-Don-t-leak-file-descriptor-on-read-path.patch
 
 build:
-  number: 1
-  # It is possible to add windows support, but the
-  # graphviz win package is not ready for it yet
-  skip: True  # [win]
+  number: 0
+  skip: true  # [py<38]
   script: {{ PYTHON }} -m pip install . --no-deps -vv
 
 requirements:
+  build:
+    - patch     # [not win]
+    - m2-patch  # [win]
+    - pkg-config
+    - {{ compiler('c') }}
   host:
     - python
     - pip
-    - setuptools
     - graphviz
-
-  build:
-    - {{ compiler('c') }}
-    - pkg-config
+    - setuptools
+    - wheel
   run:
     - python
-    - graphviz
+    - graphviz >=2.42 # [not win]
+    - graphviz >=2.46 # [win]
 
 test:
   imports:
@@ -43,24 +43,24 @@ test:
   source_files:
     - pygraphviz/tests
   commands:
+    - pip check
     - pytest --doctest-modules --durations=10 --pyargs pygraphviz
-    - conda inspect linkages -p $PREFIX $PKG_NAME  # [not win]
-    - conda inspect objects -p $PREFIX $PKG_NAME  # [osx]
   requires:
+    - pip
     - pytest
 
 about:
-  home: http://pygraphviz.github.io
-  license: BSD 3-Clause
+  home: https://pygraphviz.github.io
+  license: BSD-3-Clause
   license_family: BSD
   license_file: LICENSE
   summary: Python interface to Graphviz
   description: |
-      PyGraphviz is a Python interface to the Graphviz graph layout and
-      visualization package. With PyGraphviz you can create, edit, read, write,
-      and draw graphs using Python to access the Graphviz graph data structure
-      and layout algorithms. PyGraphviz provides a similar programming
-      interface to NetworkX (http://networkx.github.io).
+    PyGraphviz is a Python interface to the Graphviz graph layout and
+    visualization package. With PyGraphviz you can create, edit, read, write,
+    and draw graphs using Python to access the Graphviz graph data structure
+    and layout algorithms. PyGraphviz provides a similar programming
+    interface to NetworkX (https://networkx.github.io).
   doc_url: https://graphviz.readthedocs.io
   dev_url: https://github.com/pygraphviz/pygraphviz
 
