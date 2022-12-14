@@ -1,5 +1,6 @@
 {% set name = "pygraphviz" %}
 {% set version = "1.9" %}
+{% set sha256 = "fa18f7c6cea28341a4e466ed0cf05682b0a68288afe8dd7c9426782f7c1ae01c" %}
 
 package:
   name: {{ name|lower }}
@@ -9,13 +10,13 @@ source:
   fn: {{ name }}-{{ version }}.tar.gz
   # For some reason there are no .gz files here
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.zip
-  sha256: fa18f7c6cea28341a4e466ed0cf05682b0a68288afe8dd7c9426782f7c1ae01c
+  sha256: {{ sha256 }}
   patches:
     - patches/0001-Ensure-define_macros-remains-a-list-on-Windows.patch
     - patches/0002-AGraph-Don-t-leak-file-descriptor-on-read-path.patch
 
 build:
-  number: 0
+  number: 1
   skip: true  # [py<38]
   script: {{ PYTHON }} -m pip install . --no-deps -vv
 
@@ -33,8 +34,8 @@ requirements:
     - wheel
   run:
     - python
-    - graphviz >=2.42 # [not win]
-    - graphviz >=2.46 # [win]
+    - graphviz >=2.42,<3 # [not win]
+    - graphviz >=2.46,<3 # [win]
 
 test:
   imports:
@@ -61,7 +62,7 @@ about:
     and draw graphs using Python to access the Graphviz graph data structure
     and layout algorithms. PyGraphviz provides a similar programming
     interface to NetworkX (https://networkx.github.io).
-  doc_url: https://graphviz.readthedocs.io
+  doc_url: https://pygraphviz.github.io/documentation/latest/
   dev_url: https://github.com/pygraphviz/pygraphviz
 
 extra:
