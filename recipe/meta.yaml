@@ -29,8 +29,7 @@ requirements:
     - wheel
   run:
     - python
-    # https://github.com/pygraphviz/pygraphviz/blob/pygraphviz-1.14/INSTALL.txt#L8
-    - graphviz >=2.46,<3
+    - graphviz >=2.46
 
 test:
   imports:
