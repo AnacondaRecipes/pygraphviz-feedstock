@@ -24,12 +24,12 @@ requirements:
   host:
     - python
     - pip
-    - graphviz 12.2.1
+    - graphviz
     - setuptools
     - wheel
   run:
     - python
-    - graphviz 12.2.1
+    - graphviz
 
 test:
   imports:
