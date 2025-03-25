@@ -45,12 +45,7 @@ test:
       pytest pygraphviz/tests
       --doctest-modules
       --durations=10
-      -k "not (
-        test_drawing_png_output_with_NULL_smoketest or
-        test_layout_prog_arg or
-        test_repr_output or
-        test_mimetype_select
-      )"
+      -k "not (test_drawing_png_output_with_NULL_smoketest or test_layout_prog_arg or test_repr_output or test_mimetype_select)"
     {% else %}
     - pytest --doctest-modules --durations=10 --pyargs pygraphviz
     {% endif %}
