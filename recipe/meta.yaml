@@ -40,8 +40,7 @@ test:
     - pygraphviz/tests
   commands:
     - pip check
-    # Random test failures and segfault errors happening on windows
-    - pytest --doctest-modules --durations=10 --pyargs pygraphviz  # [not win]
+    - pytest --doctest-modules --durations=10 --pyargs pygraphviz
   requires:
     - pip
     - pytest
