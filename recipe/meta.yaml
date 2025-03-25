@@ -41,7 +41,7 @@ test:
   commands:
     - pip check
     {% if win %}
-    - pytest --doctest-modules --durations=10 --pyargs pygraphviz --ignore=pygraphviz/tests/test_drawing.py
+    - pytest pygraphviz/tests --doctest-modules --durations=10 --ignore=pygraphviz/tests/test_drawing.py
     {% else %}
     - pytest --doctest-modules --durations=10 --pyargs pygraphviz
     {% endif %}
