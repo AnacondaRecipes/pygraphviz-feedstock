@@ -40,8 +40,11 @@ test:
     - pygraphviz/tests
   commands:
     - pip check
-    - pytest --doctest-modules --durations=10 --pyargs pygraphviz  # [unix]
-    - pytest --doctest-modules --durations=10 --pyargs pygraphviz --ignore=pygraphviz/tests/test_drawing.py  # [win]
+    {% if win %}
+    - pytest --doctest-modules --durations=10 --pyargs pygraphviz --ignore=pygraphviz/tests/test_drawing.py
+    {% else %}
+    - pytest --doctest-modules --durations=10 --pyargs pygraphviz
+    {% endif %}
   requires:
     - pip
     - pytest
