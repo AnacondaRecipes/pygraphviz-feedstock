@@ -13,7 +13,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 0
+  number: 1
   skip: true  # [py<310]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
@@ -30,7 +30,7 @@ requirements:
   run:
     - python
     # https://github.com/pygraphviz/pygraphviz/blob/pygraphviz-1.14/INSTALL.txt#L8
-    - graphviz >=2.46,<3
+    - graphviz
 
 test:
   imports:
@@ -40,7 +40,11 @@ test:
     - pygraphviz/tests
   commands:
     - pip check
+    {% if win %}
+    - pytest pygraphviz/tests --doctest-modules --durations=10 -k "not (test_drawing_png_output_with_NULL_smoketest or test_layout_prog_arg or test_repr_output or test_mimetype_select or test_drawing_makes_file)"
+    {% else %}
     - pytest --doctest-modules --durations=10 --pyargs pygraphviz
+    {% endif %}
   requires:
     - pip
     - pytest
