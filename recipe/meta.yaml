@@ -1,6 +1,6 @@
 {% set name = "pygraphviz" %}
-{% set version = "1.14" %}
-{% set sha256 = "c10df02377f4e39b00ae17c862f4ee7e5767317f1c6b2dfd04cea6acc7fc2bea" %}
+{% set version = "2.0" %}
+{% set sha256 = "7cc6cfff4bfa6c1bf389cbbf72f5995a717c69de69c18763544c04b41181f59e" %}
 
 package:
   name: {{ name|lower }}
@@ -9,11 +9,11 @@ package:
 source:
   fn: {{ name }}-{{ version }}.tar.gz
   # For some reason there are no .gz files here
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/pygraphviz-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/pygraphviz-{{ version }}.tar.gz
   sha256: {{ sha256 }}
 
 build:
-  number: 1
+  number: 0
   skip: true  # [py<310]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
@@ -25,8 +25,8 @@ requirements:
     - python
     - pip
     - graphviz
-    - setuptools
-    - wheel
+    - setuptools >=78
+    - swig >4.1.0
   run:
     - python
     # https://github.com/pygraphviz/pygraphviz/blob/pygraphviz-1.14/INSTALL.txt#L8
@@ -40,11 +40,8 @@ test:
     - pygraphviz/tests
   commands:
     - pip check
-    {% if win %}
     - pytest pygraphviz/tests --doctest-modules --durations=10 -k "not (test_drawing_png_output_with_NULL_smoketest or test_layout_prog_arg or test_repr_output or test_mimetype_select or test_drawing_makes_file)"
-    {% else %}
     - pytest --doctest-modules --durations=10 --pyargs pygraphviz
-    {% endif %}
   requires:
     - pip
     - pytest
