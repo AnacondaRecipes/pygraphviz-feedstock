@@ -3,23 +3,23 @@
 {% set sha256 = "7cc6cfff4bfa6c1bf389cbbf72f5995a717c69de69c18763544c04b41181f59e" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
   fn: {{ name }}-{{ version }}.tar.gz
   # For some reason there are no .gz files here
-  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/pygraphviz-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: {{ sha256 }}
 
 build:
   number: 0
   skip: true  # [py<310]
-  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
 requirements:
   build:
     - pkg-config
+    - {{ stdlib('c') }}
     - {{ compiler('c') }}
   host:
     - python
@@ -32,6 +32,7 @@ requirements:
     # https://github.com/pygraphviz/pygraphviz/blob/pygraphviz-1.14/INSTALL.txt#L8
     - graphviz
 
+{% set ignored_tests = " not (test_drawing_png_output_with_NULL_smoketest or test_layout_prog_arg or test_repr_output or test_mimetype_select or test_drawing_makes_file)" %}  # [win]
 test:
   imports:
     - pygraphviz
@@ -40,8 +41,8 @@ test:
     - pygraphviz/tests
   commands:
     - pip check
-    - pytest pygraphviz/tests --doctest-modules --durations=10 -k "not (test_drawing_png_output_with_NULL_smoketest or test_layout_prog_arg or test_repr_output or test_mimetype_select or test_drawing_makes_file)"
-    - pytest --doctest-modules --durations=10 --pyargs pygraphviz
+    - pytest pygraphviz/tests --doctest-modules --durations=10 -k "{{ ignored_tests }}"  # [win]
+    - pytest --doctest-modules --durations=10 --pyargs pygraphviz  # [not win]
   requires:
     - pip
     - pytest
