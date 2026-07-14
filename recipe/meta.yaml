@@ -1,6 +1,5 @@
 {% set name = "pygraphviz" %}
 {% set version = "2.0" %}
-{% set sha256 = "7cc6cfff4bfa6c1bf389cbbf72f5995a717c69de69c18763544c04b41181f59e" %}
 
 package:
   name: {{ name }}
@@ -10,7 +9,7 @@ source:
   fn: {{ name }}-{{ version }}.tar.gz
   # For some reason there are no .gz files here
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  sha256: 7cc6cfff4bfa6c1bf389cbbf72f5995a717c69de69c18763544c04b41181f59e
 
 build:
   number: 0
@@ -21,16 +20,17 @@ requirements:
     - pkg-config
     - {{ stdlib('c') }}
     - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
   host:
     - python
     - pip
-    - graphviz
+    - graphviz >=2.46.0
     - setuptools >=78
     - swig >4.1.0
   run:
     - python
-    # https://github.com/pygraphviz/pygraphviz/blob/pygraphviz-1.14/INSTALL.txt#L8
-    - graphviz
+    # https://github.com/pygraphviz/pygraphviz/blob/pygraphviz-2.0/INSTALL.txt#L8
+    - graphviz >=2.46
 
 {% set ignored_tests = " not (test_drawing_png_output_with_NULL_smoketest or test_layout_prog_arg or test_repr_output or test_mimetype_select or test_drawing_makes_file)" %}  # [win]
 test:
@@ -41,7 +41,7 @@ test:
     - pygraphviz/tests
   commands:
     - pip check
-    - pytest pygraphviz/tests --doctest-modules --durations=10 -k "{{ ignored_tests }}"  # [win]
+    - pytest --pyargs pygraphviz.tests --doctest-modules --durations=10 -k "{{ ignored_tests }}"  # [win]
     - pytest --doctest-modules --durations=10 --pyargs pygraphviz  # [not win]
   requires:
     - pip
@@ -59,7 +59,7 @@ about:
     and draw graphs using Python to access the Graphviz graph data structure
     and layout algorithms. PyGraphviz provides a similar programming
     interface to NetworkX (https://networkx.github.io).
-  doc_url: https://pygraphviz.github.io/documentation/latest/
+  doc_url: https://pygraphviz.github.io/documentation/stable
   dev_url: https://github.com/pygraphviz/pygraphviz
 
 extra:
